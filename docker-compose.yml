@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  mysql-db:
+    image: mysql
+    container_name: mysql-docker
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - spring-network
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Salud12345'
+      MYSQL_DATABASE: 'db_backend_apirest'
+      MYSQL_USER: 'jlsalud'
+      MYSQL_PASSWORD: 'Salud123'
+      MYSQL_ROOT_HOST: 'localhost'
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  springboot:
+    image: spring-api-image
+    container_name: spring-api-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+    networks:
+      - spring-network
+    environment:
+      DATABASE_URL: jdbc:mysql://mysql-db:3306/db_backend_apirest?allowPublicKeyRetrieval=true&useSSL=false
+      DATABASE_USERNAME: jlsalud
+      DATABASE_PASSWORD: Salud123
+      JWT_SECRET_KEY: 9f3b2622e7acf2988e7f674a36386894787d63ffa2baff47f24075fc5fb4250237742eb0cfe4aff00e5559a5f55b9f1a60df8beed37692eff78d2fd1ab8ad782f75d3b7c5b30a1f5e952b3fcc0a6454d566bcf72b380a00c01cc9789a4824d0df0bdf3a5ace296f710f23d4c50d7abf3d362428cff4b8035de1b9f37d66e54cce5af57976e1e15dda5953c378392a148fd3d4e33c42d39f43a69d80e9dfacdf331fa44b69befcbcc5bc7aa1df194bd4f79c3daecdb3e227cd330b8623e5f9d14c38db02255517335fe22f4e2a2b6ef1a93a417c700e2e2902128ae20a96df42e95d03a3a5cabf43043d36196483e627ff78b3b5cb275139ae58c2bf5e77aef2b
+      JWT_EXPIRATION: 86400000
+      JWT_REFRESH_TOKEN: 604800000
+
+
+
+
+networks:
+  spring-network:
+volumes:
+  mysql-volume:
