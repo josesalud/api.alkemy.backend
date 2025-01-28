@@ -28,6 +28,11 @@ public class UserService {
         return listUserResponse;
     }
 
+    public UserResponseDTO getUser(Long id){
+        var user = userRepository.findById(id);
+        return new UserResponseDTO(user.get().getId(), user.get().getName(),user.get().getEmail(),user.get().getStatus());
+    }
+
     public UserResponseDTO save(UserRequestDTO userRequestDTO){
         log.info(userRequestDTO.toString());
         var newUser = Users.builder().build();

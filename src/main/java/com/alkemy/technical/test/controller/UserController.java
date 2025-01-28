@@ -24,6 +24,12 @@ public class UserController {
         return ResponseEntity.ok(listUser);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id){
+        var userDTO = this.userService.getUser(id);
+        return ResponseEntity.ok(userDTO);
+    }
+
     @PostMapping
     public ResponseEntity<UserResponseDTO> save(@RequestBody  UserRequestDTO userRequestDTO){
         var user = this.userService.save(userRequestDTO);
