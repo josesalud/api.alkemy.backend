@@ -19,7 +19,7 @@ public class TaskService {
     private final ITaskRepository taskRepository;
 
     public List<TaskResponseDTO> getAll(){
-        var listTask = this.taskRepository.findAll();
+        var listTask = this.taskRepository.findByStatus(true);
         var listTaskResponse = listTask.stream().map(task -> {
             return new TaskResponseDTO(task.getId(),task.getName(),task.getDescription(),task.getStatus());
         }).toList();
